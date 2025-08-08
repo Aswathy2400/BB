@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Gift Box Surprise</title>
+<style>
+    body {
+        background-color: #ffff(100% 0 -0.00011);
+        color: #00ff00;
+        font-family: monospace;
+        margin: 0;
+        padding: 0;
+    }
+    h1 {
+        text-align: center;
+        color: gold;
+        margin-top: 20px;
+    }
+    .box-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 30px;
+    gap: 20px;
+    max-width: 520px; /* 3 boxes width + gaps */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+    /*.gift-box {
+        width: 150px;
+        height: 150px;
+        border: 2px solid gold;
+        border-radius: 10px;
+        overflow: hidden;
+        cursor: pointer;
+        background-color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }*/
+    .gift-box img {
+        width: 80%;
+        height: 100%;
+        object-fit: cover;
+    }
+    #hackScreen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: black;
+        color: #00ff00;
+        padding: 20px;
+        white-space: pre-wrap;
+        overflow-y: auto;
+        display: none;
+        font-size: 16px;
+    }
+    #finalMsg {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black; /* stays solid */
+    color: red;
+    font-size: 50px;
+    font-weight: bold;
+    justify-content: center;
+    align-items: center;
+}
+
+#finalMsg span {
+    animation: flash 2s infinite; /* only text blinks */
+}
+
+@keyframes flash {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+    .result-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: black;
+        color: white;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        font-size: 30px;
+        flex-direction: column;
+    }
+    .result-screen img {
+        max-width: 80%;
+        max-height: 80%;
+    }
+    #result.quote-mode {
+    background-color: white;
+    color: black;
+    font-style: italic;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+}
+
+#result.quote-mode p {
+    font-size: 28px;
+    max-width: 80%;
+    line-height: 1.5;
+}
+#audioFrameContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    font-size: 40vmin; /* scales with screen size */
+ /* super large emoji */
+}
+
+
+#audioFrameContainer iframe {
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    border: none;
+}
+
+
+
+
+
+
+</style>
+</head>
+<body>
+
+<h1>🎁 Choose a Gift 🎁</h1>
+
+<div class="box-container">
+    
+   <div class="gift-box" onclick="showActivityWithSound('activity1.html')">
+        <img src="gift.jpg" alt="Gift Box">
+    </div>
+   
+    <div class="gift-box" onclick="showQuote('Better luck  next time')"><img src="gift.jpg"></div>
+   <div class="gift-box" 
+     onclick="showQuote('YOU DON\'T ALWAYS NEED A PLAN . SOMETIMES YOU JUST NEED TO BREATHE, TRUST, AND SEE WHAT HAPPENS')">
+    <img src="gift.jpg" alt="Gift">
+</div>
+
+    <div class="gift-box" onclick="startHack()"><img src="gift.jpg"></div>
+    
+</div>
+
+<div id="hackScreen"></div>
+<div id="finalMsg">
+    <span>⚠ SYSTEM  HACKED ⚠</span>
+</div>
+
+
+<div id="result" class="result-screen">
+    <p id="resultText"></p>
+    <img id="resultImage" src="">
+</div>
+<audio id="funnySound" src="funny.mp3"></audio>
+
+<!-- Activity Frame -->
+<iframe id="activityFrame" style="width:100%; height:500px; border:none; display:none;"></iframe>
+<div id="audioFrameContainer">
+    
+    <iframe id="activityFrame"></iframe>
+    <div id="audioFrameContainer">🤡</div>
+   
+
+</div>
+
+
+
+<script>
+    function showActivityWithSound() {
+    document.querySelector(".box-container").style.display = "none";
+    document.getElementById("funnySound").play();
+
+    document.getElementById("audioFrameContainer").style.display = "flex";
+    document.getElementById("printBtn").style.display = "none"; // no print in this mode
+}
+
+
+
+function printActivity() {
+    let frame = document.getElementById("activityFrame");
+    frame.contentWindow.print();
+}
+    
+    function randomIP() {
+        return `${Math.floor(Math.random()*256)}.${Math.floor(Math.random()*256)}.${Math.floor(Math.random()*256)}.${Math.floor(Math.random()*256)}`;
+    }
+    function randomFile() {
+        const files = [
+            "bank_accounts_full.xls", "personal_photos.zip", "confidential.pdf",
+            "crypto_wallet_keys.dat", "private_chat_logs.txt", "system_config.sys"
+        ];
+        return files[Math.floor(Math.random()*files.length)];
+    }
+    function randomPort() {
+        return Math.floor(Math.random()*65535);
+    }
+    function randomMessage() {
+        const msgs = [
+            `[ACCESS] Connecting to secure server at ${randomIP()} on port ${randomPort()}...`,
+            `[BREACH] Vulnerability found, injecting exploit...`,
+            `[DATA] Downloading file: ${randomFile()} ...`,
+            `[SPYWARE] Uploading screenshots to remote server ${randomIP()}...`,
+            `[ENCRYPTION] Locking files with key: ${Math.random().toString(36).substring(2,20)}`,
+            `[CLEANUP] Deleting security logs... SUCCESS.`,
+            `[PASSWORD] Cracking hashes... Progress: ${(Math.random()*100).toFixed(2)}%`
+        ];
+        return msgs[Math.floor(Math.random()*msgs.length)];
+    }
+
+    function typeLine(line) {
+        const screen = document.getElementById("hackScreen");
+        screen.innerHTML += line + "\n";
+        screen.scrollTop = screen.scrollHeight;
+    }
+
+    async function startHack() {
+        document.querySelector(".box-container").style.display = "none";
+        const screen = document.getElementById("hackScreen");
+        screen.innerHTML = "";
+        screen.style.display = "block";
+
+        const duration = 5000; // 2 minutes
+        let delay = 20;
+        const startTime = Date.now();
+
+        while (Date.now() - startTime < duration) {
+            typeLine(randomMessage());
+            if (delay > 50) delay -= 5;
+            await new Promise(r => setTimeout(r, delay));
+        }
+
+        screen.style.display = "none";
+        document.getElementById("finalMsg").style.display = "flex";
+
+    }
+
+   function showImage(img) {
+    document.querySelector(".box-container").style.display = "none";
+    const res = document.getElementById("result");
+    
+    res.classList.remove("quote-mode"); // remove quote styling if any
+    res.classList.add("image-mode");    // apply image styling
+    
+    document.getElementById("resultImage").src = img;
+    document.getElementById("resultText").textContent = "";
+    document.getElementById("resultImage").style.display = "block";
+    
+    res.style.display = "flex";
+}
+
+
+    function showQuote(quote) {
+    document.querySelector(".box-container").style.display = "none";
+    const res = document.getElementById("result");
+    
+    res.classList.add("quote-mode"); // apply quote styling
+    
+    document.getElementById("resultText").textContent = `💡 "${quote}" 💬`;
+    document.getElementById("resultImage").style.display = "none";
+    
+    res.style.display = "flex";
+}
+
+</script>
+
+</body>
+</html>
